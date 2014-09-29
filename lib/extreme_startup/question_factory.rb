@@ -47,11 +47,11 @@ module ExtremeStartup
         else 20
       end
     end
-    
+
     def was_answered_correctly
       result == "correct"
     end
-    
+
     def was_answered_wrongly
       result == "wrong"
     end
@@ -288,7 +288,7 @@ module ExtremeStartup
       if (n > 20 && n % 10 == 2)
         return "what is the #{n}nd number in the Fibonacci sequence"
       end
-      return "what is the #{n}th number in the Fibonacci sequence"  
+      return "what is the #{n}th number in the Fibonacci sequence"
     end
     def points
       50
@@ -387,10 +387,11 @@ module ExtremeStartup
   end
 
   class QuestionFactory
-    attr_reader :round
+    attr_reader :round, :max_round
 
     def initialize
       @round = 1
+      @max_round = 7
       @question_types = [
         AdditionQuestion,
         MaximumQuestion,
@@ -417,7 +418,7 @@ module ExtremeStartup
     end
 
     def advance_round
-      @round += 1
+      @round = [@round + 1, @max_round].min
     end
 
   end
