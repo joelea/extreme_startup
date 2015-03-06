@@ -95,6 +95,15 @@ module ExtremeStartup
     end
   end
 
+  class TimeOrderingQuestion < Question
+    def initialize(player)
+    end
+
+    def as_text
+      "which of the following is earliest: 10pm"
+    end
+  end
+
   class TernaryMathsQuestion < Question
     def initialize(player, *numbers)
       if numbers.any?
