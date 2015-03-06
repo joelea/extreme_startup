@@ -96,12 +96,17 @@ module ExtremeStartup
   end
 
   class HardWiredQuestion < Question
+    attr_reader :correct_answer
+
     def initialize(player, question, answer)
       @question = question
+      @correct_answer = answer
     end
+
     def as_text
       @question
     end
+
   end
   class TimeOrderingQuestion < Question
     attr_reader :correct_answer
