@@ -2,6 +2,37 @@ require 'set'
 require 'prime'
 
 module ExtremeStartup
+
+  class Time
+    attr_reader :twenty_four_hour_representation
+
+    def initialize(twenty_four_hour_representation)
+      @twenty_four_hour_representation = twenty_four_hour_representation
+    end
+
+    def as_24_hour_time
+      @twenty_four_hour_representation.to_s + ".00"
+    end
+
+    def as_military_time
+      if @twenty_four_hour_representation < 10
+        prefix = "0"
+      else
+        prefix = ""
+      end
+      prefix + @twenty_four_hour_representation.to_s + "00"
+    end
+
+    def as_analogue_time
+      if @twenty_four_hour_representation < 12
+        return @twenty_four_hour_representation.to_s + "am"
+      else
+        return (@twenty_four_hour_representation - 12).to_s + "pm"
+      end
+    end
+
+  end
+
   class Question
     class << self
       def generate_uuid
@@ -97,6 +128,11 @@ module ExtremeStartup
 
   class ElementsSumToZeroQuestion < Question
     def initialize(player, numbers)
+      if numbers.nil?
+        numbers = random_number_list
+        numbers << -numbers.sample()
+      end
+
       @numbers = numbers
     end
 
@@ -112,6 +148,12 @@ module ExtremeStartup
 
     def as_text
       "Find 2 elements that sum to 0 in: #{@numbers.join(", ")}"
+    end
+
+    private
+
+    def random_number_list
+      (0..rand(10)).map { 50 - rand(100) }
     end
   end
 
@@ -232,6 +274,35 @@ module ExtremeStartup
     end
   end
 
+  class HardTimeOrderingQuestion < Question
+    attr_reader :correct_answer
+
+    def initialize(player)
+      @times = random_list_of_times.map { |t| Time.new(t) }
+                                   .map { |time| [time, random_representation_of(time)] }
+      @correct_answer = @times.sort { |t| t[0].twenty_four_hour_representation }
+                              .first()
+                              .first()
+    end
+
+    def as_text
+      time_strings = @times.map { |time| time[1] }
+      "which of the following is earliest: #{time_strings.join(", ")}"
+    end
+
+    def random_list_of_times
+      (0...1+rand(8)).map { 1 + rand(23) }
+    end
+
+    def random_representation_of(time)
+      [
+        time.as_24_hour_time,
+        time.as_military_time,
+        time.as_analogue_time,
+      ].sample()
+    end
+  end
+
   class TernaryMathsQuestion < Question
     def initialize(player, *numbers)
       if numbers.any?
@@ -261,10 +332,10 @@ module ExtremeStartup
     end
 
     def correct_answer
-       @numbers.select do |x|
+      @numbers.select do |x|
          should_be_selected(x)
-       end.join(', ')
-     end
+      end.join(', ')
+    end
   end
 
   class MaximumQuestion < SelectFromListOfNumbersQuestion
@@ -275,14 +346,14 @@ module ExtremeStartup
       40
     end
     private
-      def should_be_selected(x)
-        x == @numbers.max
-      end
-
-      def candidate_numbers
-          (1..100).to_a
-      end
+    def should_be_selected(x)
+      x == @numbers.max
     end
+
+    def candidate_numbers
+        (1..100).to_a
+    end
+  end
 
   class AdditionQuestion < BinaryMathsQuestion
     def as_text
@@ -530,6 +601,7 @@ module ExtremeStartup
       @round = 1
       @max_round = 7
       @question_types = [
+        HardTimeOrderingQuestion,
         TimeOrderingQuestion,
         EasyRomanNumeralsQuestion,
         AdditionQuestion,
