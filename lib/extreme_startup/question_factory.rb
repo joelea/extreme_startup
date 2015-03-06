@@ -96,8 +96,13 @@ module ExtremeStartup
   end
 
   class TimeOrderingQuestion < Question
-    def initialize(player, times=["10pm"])
-      @times = times
+    def initialize(player, times=nil)
+      if(times.nil?)
+        am_times = [0..rand(5)].map { rand(12) }
+        @times = am_times.map { |time| "#{time}am"}
+      else
+        @times = times
+      end
     end
 
     def as_text
