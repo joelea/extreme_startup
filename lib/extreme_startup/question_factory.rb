@@ -98,10 +98,10 @@ module ExtremeStartup
   class TimeOrderingQuestion < Question
     def initialize(player, am_times=nil, pm_times=nil)
       if(am_times.nil?)
-        am_times = (0...1+rand(5)).map { 1 + rand(11) }
+        am_times = random_list_of_times
       end
       if(pm_times.nil?)
-        pm_times = (0...1+rand(5)).map { 1 + rand(11) }
+        pm_times = random_list_of_times
       end
 
       in_order_times = am_times.sort().map { |time| "#{time}am"} + pm_times.sort().map { |time| "#{time}pm"}
@@ -116,6 +116,11 @@ module ExtremeStartup
 
     def answered_correctly(time)
       return time == @answer
+    end
+
+    private
+    def random_list_of_times
+      (0...1+rand(5)).map { 1 + rand(11) }
     end
   end
 
