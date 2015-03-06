@@ -131,6 +131,7 @@ module ExtremeStartup
       if numbers.nil?
         numbers = random_number_list
         numbers << -numbers.sample()
+        numbers = numbers.shuffle()
       end
 
       @numbers = numbers
