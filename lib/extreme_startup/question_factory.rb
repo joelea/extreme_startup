@@ -96,6 +96,8 @@ module ExtremeStartup
   end
 
   class TimeOrderingQuestion < Question
+    attr_reader :correct_answer
+
     def initialize(player, am_times=nil, pm_times=nil)
       if(am_times.nil?)
         am_times = random_list_of_times
@@ -106,16 +108,12 @@ module ExtremeStartup
 
       in_order_times = am_times.sort().map { |time| "#{time}am"} + pm_times.sort().map { |time| "#{time}pm"}
 
-      @answer = in_order_times[0]
+      @correct_answer = in_order_times[0]
       @times = in_order_times.shuffle()
     end
 
     def as_text
       "which of the following is earliest: #{@times.join(", ")}"
-    end
-
-    def answered_correctly(time)
-      return time == @answer
     end
 
     private
@@ -422,6 +420,7 @@ module ExtremeStartup
       @round = 1
       @max_round = 7
       @question_types = [
+        TimeOrderingQuestion,
         AdditionQuestion,
         MaximumQuestion,
         MultiplicationQuestion,

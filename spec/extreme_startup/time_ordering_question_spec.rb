@@ -23,11 +23,11 @@ module ExtremeStartup
       end
 
       it "identifies a correct answer" do
-        question.answered_correctly("8am").should be_true
+        question.answered_correctly?("8am").should be_true
       end
 
       it "identifies a wrong answer" do
-        question.answered_correctly("10am").should be_false
+        question.answered_correctly?("10am").should be_false
       end
     end
   end
