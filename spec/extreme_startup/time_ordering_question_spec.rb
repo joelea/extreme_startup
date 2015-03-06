@@ -8,7 +8,7 @@ module ExtremeStartup
 
 
     it "converts to a string" do
-      question.as_text.should =~ /which of the following is earliest: .+/i
+      question.as_text.should =~ /which of the following is earliest: \d+[(am)(pm)](, \d+[(am)(pm)])*/i
     end
 
     describe "when given some times" do
