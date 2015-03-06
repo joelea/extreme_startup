@@ -127,7 +127,7 @@ module ExtremeStartup
   end
 
   class ElementsSumToZeroQuestion < Question
-    def initialize(player, numbers)
+    def initialize(player, numbers=nil)
       if numbers.nil?
         numbers = random_number_list
         numbers << -numbers.sample()
@@ -139,8 +139,11 @@ module ExtremeStartup
     def answered_correctly?(numberString)
       begin
         numbers_as_strings = numberString.split(", ")
-        numbers = numbers_as_strings.map { |n| Integer(n) }
-        return (numbers.size == 2) && (numbers.inject(:+) == 0)
+        answers = numbers_as_strings.map { |n| Integer(n) }
+        return (answers.size == 2) &&
+               (answers.inject(:+) == 0) &&
+               answers.all? { |n| @numbers.include? n }
+
       rescue
         false
       end
@@ -601,13 +604,15 @@ module ExtremeStartup
       @round = 1
       @max_round = 7
       @question_types = [
-        HardTimeOrderingQuestion,
-        TimeOrderingQuestion,
-        EasyRomanNumeralsQuestion,
         AdditionQuestion,
+        EasyRomanNumeralsQuestion,
+        TimeOrderingQuestion,
+        ElementsSumToZeroQuestion,
+        FibonacciQuestion,
         MaximumQuestion,
         MultiplicationQuestion,
         ReverseRomanNumeralsQuestion,
+        HardTimeOrderingQuestion,
         FibonacciQuestion,
         RandomRomanNumeralsQuestion,
         AnagramQuestion,

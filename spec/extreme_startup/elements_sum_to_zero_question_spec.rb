@@ -27,5 +27,9 @@ module ExtremeStartup
       question.answered_correctly?("1, abba").should be_false
     end
 
+    it "should only accept numbers that are in the original list" do
+      question.answered_correctly?("2, -2").should be_false
+    end
+
   end
 end
