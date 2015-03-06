@@ -96,11 +96,12 @@ module ExtremeStartup
   end
 
   class TimeOrderingQuestion < Question
-    def initialize(player)
+    def initialize(player, times=["10pm"])
+      @times = times
     end
 
     def as_text
-      "which of the following is earliest: 10pm"
+      "which of the following is earliest: #{@times.join(", ")}"
     end
   end
 
