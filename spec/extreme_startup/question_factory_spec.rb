@@ -35,19 +35,5 @@ module ExtremeStartup
 
     end
 
-    context "in the 8th round" do
-      before(:each) do
-        7.times { factory.advance_round }
-      end
-
-      it "keeps the last window of questions available" do
-        questions = 30.times.map { factory.next_question(player) }
-        questions.group_by { |q| q.class}
-                 .size
-                 .should eql(5)
-      end
-
-    end
-
   end
 end

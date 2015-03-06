@@ -95,6 +95,16 @@ module ExtremeStartup
     end
   end
 
+  class ElementsSumToZeroQuestion < Question
+    def initialize(player, numbers)
+      @numbers = numbers
+    end
+
+    def as_text
+      "Find 2 elements that sum to 0 in: #{@numbers.join(", ")}"
+    end
+  end
+
   class HardWiredQuestion < Question
     attr_reader :correct_answer
 
@@ -110,15 +120,18 @@ module ExtremeStartup
   end
 
   class RomanNumeralsQuestion < HardWiredQuestion
+    attr_reader :number, :numeral
+
     def initialize(player)
       question_answer_pair = numeral_mapping.to_a.sample()
-      number = question_answer_pair[1]
-      answer = question_answer_pair[0]
+      @number = question_answer_pair[1]
+      @numeral = question_answer_pair[0]
 
       question = "Convert #{number} into Roman Numerals"
-      super(player, question, answer)
+      super(player, question, numeral)
     end
   end
+
 
   class EasyRomanNumeralsQuestion < RomanNumeralsQuestion
     def numeral_mapping
@@ -167,6 +180,18 @@ module ExtremeStartup
         "DCCVII" => 707,
         "MDCCCXIV" => 1814,
       }
+    end
+  end
+
+  class ReverseRomanNumeralsQuestion < HardWiredQuestion
+    def initialize(player)
+      normal_roman_numerals_question = EasyRomanNumeralsQuestion.new(player)
+
+      numeral = normal_roman_numerals_question.numeral
+      number = normal_roman_numerals_question.number
+      question = "What is #{numeral} in decimal"
+
+      super(player, question, number)
     end
   end
 
@@ -500,16 +525,9 @@ module ExtremeStartup
         AdditionQuestion,
         MaximumQuestion,
         MultiplicationQuestion,
-        SquareCubeQuestion,
-        GeneralKnowledgeQuestion,
-        PrimesQuestion,
-        SubtractionQuestion,
+        ReverseRomanNumeralsQuestion,
         FibonacciQuestion,
-        PowerQuestion,
         RandomRomanNumeralsQuestion,
-        AdditionAdditionQuestion,
-        AdditionMultiplicationQuestion,
-        MultiplicationAdditionQuestion,
         AnagramQuestion,
         ScrabbleQuestion
       ]
