@@ -19,5 +19,13 @@ module ExtremeStartup
       question.answered_correctly?("1").should be_false
     end
 
+    it "should reject an answer pair that has more than 2 elements" do
+      question.answered_correctly?("1, -1, 3").should be_false
+    end
+
+    it "should reject an answer containing non-number values in the list" do
+      question.answered_correctly?("1, abba").should be_false
+    end
+
   end
 end

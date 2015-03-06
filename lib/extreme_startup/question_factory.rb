@@ -101,10 +101,13 @@ module ExtremeStartup
     end
 
     def answered_correctly?(numberString)
-      numbers_as_strings = numberString.split(", ")
-      return false if numbers_as_strings.size < 2
-      numbers = numbers_as_strings.map { |n| n.to_i }
-      return (numbers[0] + numbers[1]) == 0
+      begin
+        numbers_as_strings = numberString.split(", ")
+        numbers = numbers_as_strings.map { |n| Integer(n) }
+        return (numbers.size == 2) && (numbers.inject(:+) == 0)
+      rescue
+        false
+      end
     end
 
     def as_text
