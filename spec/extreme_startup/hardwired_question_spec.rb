@@ -13,5 +13,9 @@ module ExtremeStartup
     it "should identify the correct answer" do
       question.answered_correctly?("answer").should be_true
     end
+
+    it "should identify a wrong answer" do
+      question.answered_correctly?("not the answer").should be_false
+    end
   end
 end
