@@ -108,6 +108,68 @@ module ExtremeStartup
     end
 
   end
+
+  class RomanNumeralsQuestion < HardWiredQuestion
+    def initialize(player)
+      question_answer_pair = numeral_mapping.to_a.sample()
+      number = question_answer_pair[1]
+      answer = question_answer_pair[0]
+
+      question = "Convert #{number} into Roman Numerals"
+      super(player, question, answer)
+    end
+  end
+
+  class EasyRomanNumeralsQuestion < RomanNumeralsQuestion
+    def numeral_mapping
+      {
+        "I" => 1,
+        "II" => 2,
+        "III" => 3,
+        "IV" => 4,
+        "V" => 5,
+        "VI" => 6,
+        "VII" => 7,
+        "VIII" => 8,
+        "IX" => 9,
+        "X" => 10,
+        "XI" => 11,
+        "XII" => 12,
+        "XIII" => 13,
+        "XIV" => 14,
+        "XV" => 15,
+        "XVI" => 16,
+        "XVII" => 17,
+        "XVIII" => 18,
+        "XIX" => 19,
+        "XX" => 20,
+      }
+    end
+  end
+
+  class RandomRomanNumeralsQuestion < RomanNumeralsQuestion
+    def numeral_mapping
+      {
+        "I" => 1,
+        "III" => 3,
+        "IV" => 4,
+        "V" => 5,
+        "VI" => 6,
+        "VIII" => 8,
+        "CI" => 101,
+        "LIII" => 53,
+        "LIV" => 54,
+        "XXIII" => 23,
+        "XVIII" => 18,
+        "IX" => 19,
+        "XV" => 15,
+        "XXVII" => 27,
+        "DCCVII" => 707,
+        "MDCCCXIV" => 1814,
+      }
+    end
+  end
+
   class TimeOrderingQuestion < Question
     attr_reader :correct_answer
 
@@ -434,6 +496,7 @@ module ExtremeStartup
       @max_round = 7
       @question_types = [
         TimeOrderingQuestion,
+        EasyRomanNumeralsQuestion,
         AdditionQuestion,
         MaximumQuestion,
         MultiplicationQuestion,
@@ -443,6 +506,7 @@ module ExtremeStartup
         SubtractionQuestion,
         FibonacciQuestion,
         PowerQuestion,
+        RandomRomanNumeralsQuestion,
         AdditionAdditionQuestion,
         AdditionMultiplicationQuestion,
         MultiplicationAdditionQuestion,
