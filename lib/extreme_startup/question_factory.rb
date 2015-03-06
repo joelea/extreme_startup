@@ -103,6 +103,10 @@ module ExtremeStartup
     def as_text
       "which of the following is earliest: #{@times.join(", ")}"
     end
+
+    def answered_correctly(time)
+      return true
+    end
   end
 
   class TernaryMathsQuestion < Question

@@ -17,6 +17,10 @@ module ExtremeStartup
       it "should convert to the full question" do
         question.as_text.should =~ /which of the following is earliest: 10pm, 11am, 10am, 9pm/i
       end
+
+      it "identifies a correct answer" do
+        question.answered_correctly("10am").should be_true
+      end
     end
   end
 end
