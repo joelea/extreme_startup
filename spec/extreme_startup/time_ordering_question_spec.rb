@@ -12,10 +12,14 @@ module ExtremeStartup
     end
 
     describe "when given some times" do
-      let(:question) { TimeOrderingQuestion.new(Player.new, ["10pm", "11am", "10am", "9pm"])}
+      let(:question) { TimeOrderingQuestion.new(Player.new, [10, 8] , [10, 11]) }
 
       it "should convert to the full question" do
-        question.as_text.should =~ /which of the following is earliest: 10pm, 11am, 10am, 9pm/i
+        question.as_text.should =~ /which of the following is earliest: /i
+        question.as_text.should =~ /10am/
+        question.as_text.should =~ /8am/
+        question.as_text.should =~ /10pm/
+        question.as_text.should =~ /11pm/
       end
 
       it "identifies a correct answer" do
