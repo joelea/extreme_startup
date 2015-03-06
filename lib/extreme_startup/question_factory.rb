@@ -115,7 +115,7 @@ module ExtremeStartup
     end
 
     def answered_correctly(time)
-      return true
+      return time == @answer
     end
   end
 
