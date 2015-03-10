@@ -131,7 +131,7 @@ module ExtremeStartup
       if numbers.nil?
         numbers = random_number_list
         numbers << -numbers.sample()
-        numbers = numbers.shuffle()
+        numbers = numbers.shuffle().uniq()
       end
 
       @numbers = numbers
@@ -157,7 +157,7 @@ module ExtremeStartup
     private
 
     def random_number_list
-      (0..rand(10)).map { 50 - rand(100) }
+      (0..3+rand(7)).map { 50 - rand(100) }
     end
   end
 
@@ -219,22 +219,21 @@ module ExtremeStartup
   class RandomRomanNumeralsQuestion < RomanNumeralsQuestion
     def numeral_mapping
       {
-        "I" => 1,
-        "III" => 3,
-        "IV" => 4,
-        "V" => 5,
-        "VI" => 6,
-        "VIII" => 8,
         "CI" => 101,
         "LIII" => 53,
         "LIV" => 54,
         "XXIII" => 23,
-        "XVIII" => 18,
-        "IX" => 19,
-        "XV" => 15,
         "XXVII" => 27,
+        "DCCCVII" => 807,
+        "DCV" => 605,
+        "DCCXI" => 711,
         "DCCVII" => 707,
+        "DCCVI" => 706,
+        "DVI" => 506,
+        "DXXIV" => 524,
         "MDCCCXIV" => 1814,
+        "MDCCCXVII" => 1817,
+        "MDCCXVII" => 1717,
       }
     end
   end
@@ -251,38 +250,12 @@ module ExtremeStartup
     end
   end
 
-  class TimeOrderingQuestion < Question
-    attr_reader :correct_answer
-
-    def initialize(player, am_times=nil, pm_times=nil)
-      if(am_times.nil?)
-        am_times = random_list_of_times
-      end
-      if(pm_times.nil?)
-        pm_times = random_list_of_times
-      end
-
-      in_order_times = am_times.sort().map { |time| "#{time}am"} + pm_times.sort().map { |time| "#{time}pm"}
-
-      @correct_answer = in_order_times[0]
-      @times = in_order_times.shuffle()
-    end
-
-    def as_text
-      "which of the following is earliest: #{@times.join(", ")}"
-    end
-
-    private
-    def random_list_of_times
-      (0...1+rand(5)).map { 1 + rand(11) }
-    end
-  end
-
   class HardTimeOrderingQuestion < Question
     attr_reader :correct_answer
 
     def initialize(player)
-      @times = random_list_of_times.map { |t| Time.new(t) }
+      @times = random_list_of_times.uniq()
+                                   .map { |t| Time.new(t) }
                                    .map { |time| [time, random_representation_of(time)] }
       @correct_answer = @times.sort { |t| t[0].twenty_four_hour_representation }
                               .first()
@@ -295,7 +268,7 @@ module ExtremeStartup
     end
 
     def random_list_of_times
-      (0...1+rand(8)).map { 1 + rand(23) }
+      (0...2+rand(8)).map { 1 + rand(23) }
     end
 
     def random_representation_of(time)
@@ -307,13 +280,9 @@ module ExtremeStartup
     end
   end
 
-  class TernaryMathsQuestion < Question
-    def initialize(player, *numbers)
-      if numbers.any?
-        @n1, @n2, @n3 = *numbers
-      else
-        @n1, @n2, @n3 = rand(20), rand(20), rand(20)
-      end
+  class TimeOrderingQuestion < HardTimeOrderingQuestion
+    def random_representation_of(time)
+      time.as_analogue_time()
     end
   end
 
@@ -339,23 +308,6 @@ module ExtremeStartup
       @numbers.select do |x|
          should_be_selected(x)
       end.join(', ')
-    end
-  end
-
-  class MaximumQuestion < SelectFromListOfNumbersQuestion
-    def as_text
-      "which of the following numbers is the largest: " + @numbers.join(', ')
-    end
-    def points
-      40
-    end
-    private
-    def should_be_selected(x)
-      x == @numbers.max
-    end
-
-    def candidate_numbers
-        (1..100).to_a
     end
   end
 
@@ -389,108 +341,6 @@ module ExtremeStartup
     end
   end
 
-  class AdditionAdditionQuestion < TernaryMathsQuestion
-    def as_text
-      "what is #{@n1} plus #{@n2} plus #{@n3}"
-    end
-    def points
-      30
-    end
-  private
-    def correct_answer
-      @n1 + @n2 + @n3
-    end
-  end
-
-  class AdditionMultiplicationQuestion < TernaryMathsQuestion
-    def as_text
-      "what is #{@n1} plus #{@n2} multiplied by #{@n3}"
-    end
-    def points
-      60
-    end
-  private
-    def correct_answer
-      @n1 + @n2 * @n3
-    end
-  end
-
-  class MultiplicationAdditionQuestion < TernaryMathsQuestion
-    def as_text
-      "what is #{@n1} multiplied by #{@n2} plus #{@n3}"
-    end
-    def points
-      50
-    end
-  private
-    def correct_answer
-      @n1 * @n2 + @n3
-    end
-  end
-
-  class PowerQuestion < BinaryMathsQuestion
-    def as_text
-      "what is #{@n1} to the power of #{@n2}"
-    end
-    def points
-      20
-    end
-  private
-    def correct_answer
-      @n1 ** @n2
-    end
-  end
-
-  class SquareCubeQuestion < SelectFromListOfNumbersQuestion
-    def as_text
-      "which of the following numbers is both a square and a cube: " + @numbers.join(', ')
-    end
-    def points
-      60
-    end
-  private
-    def should_be_selected(x)
-      is_square(x) and is_cube(x)
-    end
-
-    def candidate_numbers
-        square_cubes = (1..100).map { |x| x ** 3 }.select{ |x| is_square(x) }
-        squares = (1..50).map { |x| x ** 2 }
-        square_cubes.concat(squares)
-    end
-
-    def is_square(x)
-      if (x ==0)
-        return true
-      end
-      (x % (Math.sqrt(x).round(4))) == 0
-    end
-
-    def is_cube(x)
-      if (x ==0)
-        return true
-      end
-      (x % (Math.cbrt(x).round(4))) == 0
-    end
-  end
-
-  class PrimesQuestion < SelectFromListOfNumbersQuestion
-     def as_text
-       "which of the following numbers are primes: " + @numbers.join(', ')
-     end
-     def points
-       60
-     end
-   private
-     def should_be_selected(x)
-       Prime.prime? x
-     end
-
-     def candidate_numbers
-       Prime.take(100)
-     end
-   end
-
   class FibonacciQuestion < BinaryMathsQuestion
     def as_text
       n = @n1 + 4
@@ -511,34 +361,6 @@ module ExtremeStartup
       a, b = 0, 1
       n.times { a, b = b, a + b }
       a
-    end
-  end
-
-  class GeneralKnowledgeQuestion < Question
-    class << self
-      def question_bank
-        [
-          ["who is the Prime Minister of Great Britain", "David Cameron"],
-          ["which city is the Eiffel tower in", "Paris"],
-          ["what currency did Spain use before the Euro", "peseta"],
-          ["what colour is a banana", "yellow"],
-          ["who played James Bond in the film Dr No", "Sean Connery"]
-        ]
-      end
-    end
-
-    def initialize(player)
-      question = GeneralKnowledgeQuestion.question_bank.sample
-      @question = question[0]
-      @correct_answer = question[1]
-    end
-
-    def as_text
-      @question
-    end
-
-    def correct_answer
-      @correct_answer
     end
   end
 
@@ -597,6 +419,24 @@ module ExtremeStartup
       scores
     end
   end
+
+  class MaximumQuestion < SelectFromListOfNumbersQuestion
+    def as_text
+      "which of the following numbers is the largest: " + @numbers.join(', ')
+    end
+    def points
+      40
+    end
+    private
+    def should_be_selected(x)
+      x == @numbers.max
+    end
+
+    def candidate_numbers
+      (1..100).to_a
+    end
+  end
+
 
   class QuestionFactory
     attr_reader :round, :max_round
