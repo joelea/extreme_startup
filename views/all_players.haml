@@ -1,0 +1,21 @@
+%html
+  %head
+    %title Extreme Startup - All Players
+    %link(rel="stylesheet" href="/css/style.css")
+  %body
+    %h1 All Players
+    %ul
+      - players.each do |player|
+        %li
+          %div{:class => ["player", "teamid"]} #{player.uuid}
+          %div{:class => ["player", "teamname"]} #{player.name}
+          %div{:class => ["player", "member", "name"]} #{player.player1name}
+          %div{:class => ["player", "member", "email"]} #{player.player1email}
+          %div{:class => ["player", "member", "name"]} #{player.player2name}
+          %div{:class => ["player", "member", "email"]} #{player.player2email}
+          %div{:class => ["player", "member", "name"]} #{player.player3name}
+          %div{:class => ["player", "member", "email"]} #{player.player3email}
+
+    :javascript
+      refresh = function() { window.location.reload(); };
+      setTimeout(refresh, 10000);
