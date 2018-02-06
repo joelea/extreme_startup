@@ -2,13 +2,30 @@
   %head
   %body
     %h1 Add a new player
-  
+
     %form{:action => "/players", :method => "post"}
-      %label{ :for => "name" }Name:
+      %label{ :for => "name" }Team Name:
       %input{ :type => "text", :id => "name", :name => "name" }
-      
+
+      %label{ :for => "player1Name" }Player 1 Name:
+      %input{ :type => "text", :id => "player1Name", :name => "player1Name" }
+
+      %label{ :for => "player1Email" }Player 1 Email:
+      %input{ :type => "text", :id => "player1Email", :name => "player1Email" }
+
+      %label{ :for => "player2Name" }Player 2 Name:
+      %input{ :type => "text", :id => "player2Name", :name => "player2Name" }
+
+      %label{ :for => "player2Email" }Player 2 Email:
+      %input{ :type => "text", :id => "player2Email", :name => "player2Email" }
+
+      %label{ :for => "player3Name" }Player 3 Name:
+      %input{ :type => "text", :id => "player3Name", :name => "player3Name" }
+
+      %label{ :for => "player3Email" }Player 3 Email:
+      %input{ :type => "text", :id => "player3Email", :name => "player3Email" }
+
       %label{ :for => "name" }URL:
       %input{ :type => "text", :id => "url", :name => "url", :placeholder => "http://..."}
-      
-      %input{ :type => "submit", :value => "Submit"}
 
+      %input{ :type => "submit", :value => "Submit"}
