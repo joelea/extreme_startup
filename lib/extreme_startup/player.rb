@@ -17,6 +17,7 @@ module ExtremeStartup
 
   class Player
     # the name here is actually the team name
+    # assumes a team has three players
     attr_reader :name, :player1name, :player1email, :player2name, :player2email, :player3name, :player3email, :url, :uuid, :log
 
     class << self
