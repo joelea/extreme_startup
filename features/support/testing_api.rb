@@ -58,7 +58,7 @@ module TestingApi
   end
 
   def enter_player(player)
-    post '/players', :name => player.name, :url => player.url 
+    post '/players', :name => player.name, :player1Name => "player1Name", :player1Email => "player1Email", :player2Name => "player2Name", :player2Email => "player2Email", :player3Name => "player3Name", :player3Email => "player3Email", :url => player.url
     doc = Nokogiri.parse(last_response.body)
     personal_page_link = doc.css('a').first
     player.personal_page = personal_page_link['href']
@@ -70,13 +70,13 @@ module TestingApi
         actual_answer.to_s == correct_answer
       end
     end
-    
+
     ::ExtremeStartup::AdditionQuestion.class_eval do
-      define_method(:points) do 
+      define_method(:points) do
         points_awarded
       end
     end
-    
+
     ::ExtremeStartup::MaximumQuestion.class_eval do
       define_method(:answered_correctly?) do |actual_answer|
         actual_answer.to_s == correct_answer
@@ -97,4 +97,3 @@ module TestingApi
 end
 
 World(TestingApi)
-

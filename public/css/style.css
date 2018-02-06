@@ -20,3 +20,9 @@ li { display: block; }
 .ranking {margin:2px; padding:3px; display:inline-block; background-color:#eed5b7}
 .ranking.name {width:200}
 .ranking.points {width:200}
+
+.player {margin:2px; padding:3px; display:inline-block}
+.player.teamid {width:100}
+.player.teamname {width:300}
+.player.member.name {width:300}
+.player.member.email {width:300}
